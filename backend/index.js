@@ -124,87 +124,6 @@ app.post("/api/logout", (req, res) => {
   });
 });
 
-// app.post('/api/getProfile', (req, res) => {
-//     console.log(req.session);
-//     if (req.session.userid) {
-//         dbclient.query(
-//             "SELECT mobile, nid, dob, name, address, (pref).locale, (pref).pay_method, (pref).pay_acc FROM customer WHERE mobile=$1",
-//             [req.session.userid]
-//         ).then(qres => {
-//             //console.log(qres);
-//             if (qres.rows.length === 0) res.send({
-//                 success: false,
-//             });
-//             else {
-//                 res.send({
-//                     ...qres.rows[0],
-//                     success: true,
-//                 });
-//             };
-//         }).catch(e => console.error(e.stack));
-//     };
-// });
-
-// app.post('/api/getSelfID', (req, res) => {
-//     console.log(req.session);
-//     if (req.session.userid) {
-//         dbclient.query(
-//             "SELECT nid, name FROM customer WHERE mobile=$1",
-//             [req.session.userid]
-//         ).then(qres => {
-//             //console.log(qres);
-//             if (qres.rows.length === 0) res.send({
-//                 success: false,
-//             });
-//             else {
-//                 res.send({
-//                     ...qres.rows[0],
-//                     success: true,
-//                 });
-//             };
-//         }).catch(e => console.error(e.stack));
-//     };
-// });
-
-// app.post('/api/updateUser', (req,res) => {
-//     let attr = req.body.attr;
-//     if (req.session.userid === req.body.mobile) {
-//         if (attr==='address' || attr==='locale' || attr==='pay_method' || attr==='pay_acc') {
-//             if (attr != "address") attr = `pref.${attr}`;
-//             dbclient.query(
-//                 `UPDATE customer SET ${attr}=$1 WHERE mobile=$2`,
-//                 [req.body.value, req.body.mobile]
-//             ).then(qres => {
-//                 //console.log(qres);
-//                 if (qres.rowCount === 1) res.send({
-//                     success: true,
-//                 });
-//                 else if (qres.rowCount === 0) {
-//                     res.send({
-//                         success: false,
-//                     });
-//                 };
-//             }).catch(e => console.error(e.stack));
-//         };
-//     };
-// });
-
-// app.post('/api/updatePassword', (req,res) => {
-//     dbclient.query(
-//         `UPDATE customer SET password=$1 WHERE mobile=$2 AND password=$3`,
-//         [req.body.password, req.session.userid, req.body.password0]
-//     ).then(qres => {
-//         //console.log(qres);
-//         if (qres.rowCount === 1) res.send({
-//             success: true,
-//         });
-//         else if (qres.rowCount === 0) {
-//             res.send({
-//                 success: false,
-//             });
-//         };
-//     }).catch(e => console.error(e.stack));
-// });
 
 app.post("/api/getStations", (req, res) => {
   dbclient
@@ -836,35 +755,7 @@ app.post("/api/assignSupportMember", (req, res) => {
   }
 });
 
-// app.get('/api/getUserDoc', (req, res) => {
-//     if (req.session.userid) {
-//         dbclient.query(
-//             `SELECT doc, docname FROM request WHERE id=$1 and user_mobile=$2`,
-//             [Number(req.query.rid), req.session.userid]
-//         ).then(qres => {
-//             console.log(qres.rows);
-//             if (qres.rows.length > 0) {
-//                 const stream = Readable.from(qres.rows[0].doc);
-//                 // res.setHeader('Content-Type', 'application/pdf');
-//                 res.setHeader('Content-Disposition', 'inline; filename=' + qres.rows[0].docname);
-//                 stream.pipe(res);
-//             } else res.send("User/admin login is required to access the ticket.");
-//         }).catch(e => console.error(e.stack));
-//     } else if (req.session.adminid) {
-//         dbclient.query(
-//             `SELECT doc, docname FROM request WHERE id=$1`,
-//             [Number(req.query.rid)]
-//         ).then(qres => {
-//             console.log(qres.rows);
-//             if (qres.rows.length > 0) {
-//                 const stream = Readable.from(qres.rows[0].doc);
-//                 // res.setHeader('Content-Type', 'application/pdf');
-//                 res.setHeader('Content-Disposition', 'inline; filename=' + qres.rows[0].docname);
-//                 stream.pipe(res);
-//             } else res.send("User/admin login is required to access the file.");
-//         }).catch(e => console.error(e.stack));
-//     } else res.send("User/admin login is required to access the file.");
-// });
+
 
 app.get("/api/getUserDoc", (req, res) => {
   console.log(req.query);
@@ -890,25 +781,6 @@ app.get("/api/getUserDoc", (req, res) => {
     .catch((e) => console.error(e.stack));
 });
 
-app.get("/breakingBad", (req, res) => {
-  res.send(`<h3>Breaking Bad</h3>(copy link and paste in url bar if clicking link doesn't download file)
-<br /><h4> SEASON 1 </h4><ol><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=e74d0ed0-0de4-4f43-88f8-3911e0e2ee9a">S1E1</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=75041451-b7db-4861-a2f8-8873b2a4bed9">S1E2</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=aa358bf2-3d41-4406-9f29-1fe28e29eb92">S1E3</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=4b877d5d-4ffa-45b2-a0eb-458e2700ea83">S1E4</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=a6db3f0a-7726-4104-a212-3d8877ea962f">S1E5</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=6c2effff-61e1-4ff4-91e3-ff0a3c951ba0">S1E6</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=60aa0359-dc39-4b99-af78-57ea62c505b1">S1E7</a></li>
-</ol><h4> SEASON 2 </h4><ol><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=3b5a1c8c-fbe3-4333-a44d-44a1a359cb72">S2E1</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=80f42ecb-ca58-4707-81bd-8388fc773283">S2E2</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=a1a2f411-8848-4be2-ae0f-c36f75664f9d">S2E3</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=660825ef-7f09-49e3-be81-d81a7f0b0f69">S2E4</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=5841bf66-526c-4912-aa39-f3f7350608c5">S2E5</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=7e012d53-9049-4fb8-82e8-37e756c17616">S2E6</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=1dc839aa-0964-4cc8-84fa-96e15d6dc6b8">S2E7</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=f3e7bf48-467c-4229-affe-bb6309b0a3f6">S2E8</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=a75c2fea-451a-4314-be22-0854e9dd0bdc">S2E9</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=8678ff43-78e4-4544-a1c5-6053ae09c77f">S2E10</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=d1d5d34d-98ad-4871-8db0-265dc35fbf9a">S2E11</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=cdddea62-a5c2-4558-a04a-f88bb89f2efa">S2E12</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=25936d01-8236-4038-b2b7-878594b42692">S2E13</a></li></ol></ol><h4> SEASON 3 </h4><ol><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=4c4bab47-020c-4634-95d7-8f5628f6cdb8">S3E1</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=4d05f4e5-6272-4d74-95fe-d927184f387d">S3E2</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=d634914d-865e-4e61-94d8-c48720dcc910">S3E3</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=7bbdb760-4ee6-4ed4-84e8-8d6d11ed7b46">S3E4</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=1c76a39f-f8f0-439a-a062-5f6ac7f9c214">S3E5</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=03b5c8ed-d527-4a36-82e3-d498fcc081d5">S3E6</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=2fb81b56-40d9-4b1b-ac9c-fb9991114a8f">S3E7</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=344def19-d1c2-446e-b412-a875b7951f9c">S3E8</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=5a1c762b-c184-4667-9790-85d0cc4a6a58">S3E9</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=c1913441-398f-4c5b-b757-ac0036d918f4">S3E10</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=806cc43d-4dbd-4db2-b159-3004f8717772">S3E11</a></li>
-<li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=ee41b111-ef4e-4422-82a7-b1e95298a914">S3E12</a></li><li><a href="http://103.94.135.119:6969/api/getUserDoc?rid=92324556-f290-4a86-b4db-ef6e882ed809">S3E13</a></li></ol>`);
-});
 
 app.post("/api/getNotices", (req, res) => {
   dbclient
